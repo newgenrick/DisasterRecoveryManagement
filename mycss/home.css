@@ -1,0 +1,123 @@
+html {
+  margin: 0;
+  
+}
+body{
+	background-size: cover;
+  background: url("../images/earthquake.jpg") no-repeat center center fixed;
+  background-blend-mode: darken;
+  transition: 3s;
+
+}
+/*.navbar-inverse {
+	background-color:rgba(0,0,0,0.4) !important;
+	border-color:transparent;
+	background-image:none;
+	box-shadow:none;	
+}*/
+button{
+  letter-spacing : 2px;
+  
+  outline:none;
+  border:none;
+  padding:20px 20px;
+  font-size : 20px;
+  border-radius: 15px;
+  color:white;
+  position:relative;
+  margin: 10px 20px;
+  display:inline-block;
+}
+
+button.green:hover{
+  
+  box-shadow: 0px 7px #50c436;
+  cursor:pointer;
+  top:3px;
+}
+
+button.green:active{
+  box-shadow: 0px 3px #9ce02f;
+  top:7px;
+  background-color:#b5f74c;
+}
+button.blue:hover{
+  
+  box-shadow: 0px 7px #6ec5d8;
+  cursor:pointer;
+  top:3px;
+}
+button.blue:active{
+  box-shadow: 0px 3px #9ce02f;
+  top:7px;
+  background-color:#b5f74c;
+}
+button.orange:hover{
+  
+  box-shadow: 0px 7px #cc9322;
+  cursor:pointer;
+  top:3px;
+}
+button.orange:active{
+  box-shadow: 0px 3px #9ce02f;
+  top:7px;
+  background-color:#b5f74c;
+}
+button.brown:hover{
+  
+  box-shadow: 0px 7px #967c36;
+  cursor:pointer;
+  top:3px;
+}
+button.brown:active{
+  box-shadow: 0px 3px #9ce02f;
+  top:7px;
+  background-color:#b5f74c;
+}
+
+
+
+
+.orange{
+  background-color:#f7b022;
+  box-shadow: 0px 10px #cc9322;
+}
+.blue{
+	background-color:skyblue;
+	box-shadow: 0px 10px #6ec5d8;
+}
+.green{
+	background-color:#5be23d;
+  box-shadow: 0px 10px #50c436;
+}
+.brown{
+	background-color:#d1ac49;
+  box-shadow: 0px 10px #967c36;
+}
+div.about{
+  background: white;
+}
+div.grey{
+  background: #eaf1f2 !important;
+}
+div.buttonset{
+  margin: 250px 300px ;
+  display: inline-block;
+  background: rgba(0,0,0,0.4);
+  padding: 20px 20px;
+  border-radius: 10px;
+}
+.topic{
+  color: white;
+  text-align: center;
+}
+hr{
+  background-color:#cfd1d3;
+  height: 1.5px;
+  
+}
+.footer{
+  height:300px;
+  width:100%;
+  background-color:grey;
+}
