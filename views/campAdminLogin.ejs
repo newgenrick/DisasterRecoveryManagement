@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html> 
 <head>
 	<title>DRMS</title>
-	<link rel="shortcut icon" href="logo.ico" />
-	<link rel="stylesheet" href="css/bootstrap.css">
+	<link rel="shortcut icon" href="/logo.ico" />
+	<link rel="stylesheet" href="/css/bootstrap.css">
 	<!-- <link rel="stylesheet" type="text/css" href="mycss/home.css"> -->
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
@@ -11,7 +11,7 @@
 	
 </head>
 <nav class="navbar navbar-expand-lg navbar-inverse bg-dark" >
-  <a class="navbar-brand" href="#"><img src="logo.png" style="display: inline-block;height:40px;width:40px;">DRMS</a>
+  <a class="navbar-brand" href="#"><img src="/logo.png" style="display: inline-block;height:40px;width:40px;">DRMS</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -54,17 +54,17 @@
         <div style="width:30%; margin: 27px auto;">
             <h2>Camp Admin Login</h2><br>
             <!-- <form action="/login" method = "POST"> -->
-              <form>
+              <form action="/camp/login" method="POST">
                 <div class="form-group">
-                    <input type="text" name="username" placeholder="Camp ID" class="form-control" required>
+                    <input type="text" name="cid" placeholder="Camp ID" class="form-control" required>
                 </div>
                 <div class="form-group">
                     <input type="password" name="password" placeholder="Password" class="form-control" required>
                 </div>
+                <button class="btn btn-block btn-success btn-lg" type = "submit">login</button>
                 
-                
-            </form> 
-            <a href="./campinfo.html"><button type="submit" class="btn btn-block btn-success btn-lg"> login</button></a>
+              </form> 
+            
             <br>
             <hr>
             <h3>OR</h3><br>
@@ -73,9 +73,7 @@
                   <button type="submit" class="btn btn-block btn-primary btn-lg"> Register Camp Now </button>
                 </a>
             </form> -->
-            <a href="campRegistration.html">
-                  <button type="submit" class="btn btn-block btn-primary btn-lg"> Register Camp Now </button>
-            </a>
+            <a href="/camp/new" class="btn btn-block btn-primary btn-lg"> Register Camp Now </a>
         </div>
     </div>
     

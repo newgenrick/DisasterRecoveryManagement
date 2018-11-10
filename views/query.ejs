@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>DRMS</title>
+
+	<link rel="shortcut icon" href="/logo.ico" />
+	<link rel="stylesheet" href="/css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="/mycss/home.css	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</head>
+<nav class="navbar navbar-expand-lg navbar-inverse bg-dark fixed-top" >
+  <a class="navbar-brand" href="#"><img src="/logo.png" style="display: inline-block;height:40px;width:40px;">DRMS</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Link</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Dropdown
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="#">Action</a>
+          <a class="dropdown-item" href="#">Another action</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#">Something else here</a>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link disabled" href="#">Disabled</a>
+      </li>
+    </ul>
+    <form class="form-inline my-2 my-lg-0">
+      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+  </div>
+</nav>
+<body>
+
+	<br><br><br><br>
+	<div class="container" style="text-align: center; " >
+		<h2>Survivor Query Page</h2>
+		<hr>
+		<div class="container" style="width: 60%;">
+			<form >
+				<h5>Search Person</h5>
+					<hr>
+				<div class="form-row">
+				    <div class="form-group col-md-6">
+				      <label for="inputEmail4">first Name</label>
+				      <input type="text" class="form-control" id="inputEmail4" placeholder="First Name">
+				    </div>
+				    <div class="form-group col-md-6">
+				      <label for="inputPassword4">Second Name</label>
+				      <input type="text" class="form-control" id="inputPassword4" placeholder="Second Name">
+				    </div>
+				    <div class="form-group col-md-6">
+				      <label for="inputEmail4">Sex</label>
+				      <input type="text" class="form-control" id="inputEmail4" placeholder="Sex">
+				    </div>
+				    <div class="form-group col-md-6">
+				      <label for="inputPassword4">Age</label>
+				      <input type="number" class="form-control" id="inputPassword4" placeholder="Age">
+				    
+				 	</div>
+				 	
+					    <div class="form-group col-sm-6">
+					      <label for="inputCity">City</label>
+					      <input type="text" class="form-control" id="inputCity">
+					    </div>
+					    <div class="form-group col-sm-4">
+					      <label for="inputState">State</label>
+					      <select id="inputState" class="form-control">
+					        <option selected>Choose...</option>
+					        <option>...</option>
+					      </select>
+					    </div>
+					    <div class="form-group col-sm-2">
+					      <label for="inputZip">Zip</label>
+					      <input type="text" class="form-control" id="inputZip">
+					    </div>
+					  
+					  
+					  
+					  
+				
+					</div>
+					<button type="submit" class="btn btn-primary">Search</button>
+					<hr>
+					<p>*If you are not able to find the person in survivor list register a missing complain <a href="/query/">here.</a></p>
+				
+			</form>
+		</div>
+		<hr>
+		<br>
+		  
+		<h5>Camp Survivor List</h5>
+		<hr>
+		<div class="filter">
+			<strong>Filter By&nbsp;&nbsp;&nbsp; </strong> 
+			Sex :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<select>
+				<option>--SELECT Gender--</option>
+				<option>Male</option>
+				<option>female</option>
+			</select>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			 Age :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			 <select>
+				<option>--SELECT Age--</option>
+				<option>10-20 yrs</option>
+				<option>20-30 yrs</option>
+				<option>30-40 yrs</option>
+				<option>40-50 yrs</option>
+				<option>50-60 yrs</option>
+				<option>60+ yrs</option>
+			</select>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			 From :&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name=""  placeholder="city">
+			<br><br>
+		</div>
+		
+		<table class="table table-bordered">
+		  <thead>
+		    <tr>
+		      <th scope="col">#</th>
+		      <th scope="col">S_id</th>
+		      <th scope="col">Name</th>
+		      <th scope="col">Age</th>
+		      <th scope="col">Sex</th>
+		      <th scope="col">From</th>
+		      <th scope="col">Alive</th>
+		    </tr>
+		  </thead>
+		  <tbody>
+		    <tr>
+		      <th scope="row">1</th>
+		      <td>S01</td>
+		      <td>Bhai</td>
+		      <td>20</td>
+		      <td>male</td>
+		      <td>kanpur</td>
+		      <td>True</td>
+		    </tr>
+		    <tr>
+		      <th scope="row">2</th>
+		      <td>S02</td>
+		      <td>Chota Bhai</td>
+		      <td>15</td>
+		      <td>male</td>
+		      <td>kanpur</td>
+		      <td>True</td>
+		    </tr>
+		    <tr>
+		      <th scope="row">1</th>
+		      <td>S03</td>
+		      <td>Bade Bhai</td>
+		      <td>25</td>
+		      <td>male</td>
+		      <td>kanpur</td>
+		      <td>True</td>
+		    </tr>
+		    <tr>
+		      <th scope="row">1</th>
+		      <td>S01</td>
+		      <td>Bhai</td>
+		      <td>20</td>
+		      <td>male</td>
+		      <td>kanpur</td>
+		      <td>True</td>
+		    </tr>
+		    <tr>
+		      <th scope="row">2</th>
+		      <td>S02</td>
+		      <td>Chota Bhai</td>
+		      <td>15</td>
+		      <td>male</td>
+		      <td>kanpur</td>
+		      <td>True</td>
+		    </tr>
+		    <tr>
+		      <th scope="row">1</th>
+		      <td>S03</td>
+		      <td>Bade Bhai</td>
+		      <td>25</td>
+		      <td>male</td>
+		      <td>kanpur</td>
+		      <td>True</td>
+		    </tr>
+		    
+		  </tbody>
+		</table>
+	</div>
+	</div>
+<br><br><br><br>
+	
+</body>
+</html>

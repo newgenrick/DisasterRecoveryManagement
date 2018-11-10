@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>DRMS</title>
+	<link rel="shortcut icon" href="/logo.ico" />
+	<link rel="stylesheet" href="/css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="/mycss/campinfo.css">
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	<script type="text/javascript" src="/myjs/campinfo.js"></script>
+
+</head>
+<nav class="navbar navbar-expand-lg navbar-inverse bg-dark fixed-top" >
+  <a class="navbar-brand" href="#"><img src="/logo.png" style="display: inline-block;height:40px;width:40px;">DRMS</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Link</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Dropdown
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="#">Action</a>
+          <a class="dropdown-item" href="#">Another action</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#">Something else here</a>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link disabled" href="#">Disabled</a>
+      </li>
+    </ul>
+    <form class="form-inline my-2 my-lg-0">
+      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+  </div>
+</nav>
+<body style="background-color:  #f7f9f9">
+
+	
+	<div class="container">
+		<br><br><br><br>
+		<h3>Camp Info page - <%= camp.camp_id%>	</h3>
+		<hr>
+		<div class="row">
+			<div class="col-sm-6">
+				<table class="table">
+				    <tbody>
+				        
+				        <tr>
+				          <th>Camp Id </th>
+				            <td><%= camp.camp_id%></td>
+				            
+				        </tr>
+				        <tr>
+				          <th>Camp Location</th>
+				            <td><%= camp.location%></td>
+				            
+				        </tr>
+				        <tr>
+				          <th>Camp Admin Id</th>
+				            <td><%= camp.admin_id%></td>
+				            
+				        </tr>
+				        <tr>
+				          <th>Camp Admin Name</th>
+				            <td>Abhishek Awasthi</td>
+				            
+				        </tr>
+				        <tr>
+				          <th>No. of Survivors</th>
+				            <td><%=survivors.length %></td>
+				            
+				        </tr>
+				        <tr>
+				          <th>Threat Level(10)</th>
+				            <td><%= camp.threat_level%></td>
+				            
+				        </tr>
+				        <tr>
+				          <th>Active From</th>
+				            <td><%= camp.active_from%></td>
+				            
+				        </tr>
+				    </tbody>
+				</table>
+			</div>
+			<div class="col-sm-6">
+				<div class="mapouter"><div class="gmap_canvas"><iframe width="420" height="310" id="gmap_canvas" src="https://maps.google.com/maps?q=bangalore&t=&z=13&ie=UTF8&iwloc=&output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe><a href="https://www.crocothemes.net"></a></div><style>.mapouter{text-align:right;height:310px;width:420px;}.gmap_canvas {overflow:hidden;background:none!important;height:310px;width:420px;}</style></div>
+			</div>
+		</div>
+		<h6>**To request new resources click <a href=<%="/camp/"+camp.camp_id+"/request"%>>here.</a></h6>
+		<hr>
+		<br>
+
+		<h5>Camp Resource Info</h5>
+		<hr>
+		<ul class="nav nav-tabs" id="myTab" role="tablist">
+		  <li class="nav-item">
+		    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Allocated Resources</a>
+		  </li>
+		  <li class="nav-item">
+		    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Requested Resources</a>
+		  </li>
+		</ul>
+		<div class="tab-content" id="myTabContent">
+		  <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+		  	<table class="table table-striped">
+			  <thead>
+			    <tr>
+			      <th scope="col">#</th>
+			      <th scope="col">R_id</th>
+			      <th scope="col">R_Name</th>
+			      <th scope="col">Category</th>
+			      
+			      <th scope = "col">Imp(10)</th>
+			      <th scope="col">Quantity</th>
+			    </tr>
+			  </thead>
+			  <tbody>
+			    <% if(allocated.length!=0){-%>
+				  	<% for (var i = 0; i < allocated.length; i++) { -%>
+				  		<tr>
+					      <th scope="row"><%=i+1%></th>
+					      <td><%=allocated[i].Rid%></td>
+					      <td><%=allocated[i].name%></td>
+					      <td><%=allocated[i].category%></td>
+					      <td><%=allocated[i].imp%></td>
+					      <td><%=allocated[i].quantity%></td>
+					    </tr>
+				  	<% } -%>
+				  	</tbody>
+				</table>
+				<% }else{ -%>
+					</tbody>
+				</table>
+				<h6>No Resources have been allocated yet.</h6>
+				<br><br>
+					
+				<%}-%>
+			  
+		  </div>
+		  <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+		  	<table class="table table-striped">
+			  <thead>
+			    <tr>
+			      <th scope="col">#</th>
+			      <th scope="col">R_id</th>
+			      <th scope="col">R_Name</th>
+			      <th scope="col">Category</th>
+			      <th scope = "col">Imp(10)</th>
+			      <th scope="col">Quantity</th>
+			    </tr>
+			  </thead>
+			  <tbody>
+			  	<% if(requested.length!=0){-%>
+				  	<% for (var i = 0; i < requested.length; i++) { -%>
+				  		<tr>
+					      <th scope="row"><%=i+1%></th>
+					      <td><%=requested[i].Rid%></td>
+					      <td><%=requested[i].name%></td>
+					      <td><%=requested[i].category%></td>
+					      <td><%=requested[i].imp%></td>
+					      <td><%=requested[i].quantity%></td>
+					    </tr>
+				  	<% } -%>
+				<% }else{ -%>
+					<br>
+					<h4>No Requests are pending to be allocated.</h4>
+				<%}-%>
+			  </tbody>
+			</table>
+		  </div>
+		  
+		</div>
+		
+		
+		
+
+		<hr>
+		<br>
+		<h5>Register New Survivor</h5>
+		<hr>
+		<br>
+		<% var str = "/camp/"+camp.camp_id+"/new"%>
+		
+		<form action = <%= str%> method = "POST">
+		  <div class="form-row">
+		    <div class="form-group col-md-6">
+		      <label for="inputEmail4">first Name</label>
+		      <input type="text" class="form-control" id="inputEmail4" name = "fname" placeholder="First Name">
+		    </div>
+		    <div class="form-group col-md-6">
+		      <label for="inputPassword4">Second Name</label>
+		      <input type="text" class="form-control" id="inputPassword4" placeholder="Second Name" name = "sname">
+		    </div>
+		    <div class="form-group col-md-6">
+		      <label for="inputEmail4">Sex</label>
+		      <input type="text" class="form-control" id="inputEmail4" placeholder="Sex" name="sex">
+		    </div>
+		    <div class="form-group col-md-6">
+		      <label for="inputPassword4">Age</label>
+		      <input type="number" class="form-control" id="inputPassword4" name = "age" placeholder="Age">
+		    </div>
+		  </div>
+		 
+		  <div class="form-row">
+		    <div class="form-group col-md-6">
+		      <label for="inputCity">City</label>
+		      <input type="text" class="form-control" id="inputCity" name = "city">
+		    </div>
+		    <div class="form-group col-md-4">
+		      <label for="inputState">State</label>
+		      <input type="text" class="form-control" id="inputCity" name = "state">
+
+		    </div>
+		    <div class="form-group col-md-2">
+		      <label for="inputZip">Zip</label>
+		      <input type="text" class="form-control" id="inputZip" name="zip">
+		    </div>
+		  </div>
+
+		  <button type="submit" class="btn btn-primary">Register</button>
+		</form>
+		<hr>
+		<br><br>
+		<h5>Camp Survivor List</h5>
+		<hr>
+		<div class="filter">
+			<form action=<%="/camp/"+camp.camp_id +"/filter"%> method="POST">
+				<strong>Filter By&nbsp;&nbsp;&nbsp; </strong> 
+				Sex :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<select name = "gender">
+					<option value = "0">--SELECT Gender--</option>
+					<option value = "1">Male</option>
+					<option value = "2">female</option>
+				</select>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				 Age :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				 <select name = "age">
+					<option value = "0">--SELECT Age--</option>
+					<option value = "1">10-20 yrs</option>
+					<option value="2">20-30 yrs</option>
+					<option value="3">30-40 yrs</option>
+					<option value="4">40-50 yrs</option>
+					<option value="5">50-60 yrs</option>
+					<option value="6">60+ yrs</option>
+				</select>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				 From :&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="city"  placeholder="city">
+				 &nbsp;&nbsp;&nbsp;&nbsp;<button class="btn btn-success btn-sm" type="submit">Filter</button>
+				<br><br>
+				
+			</form>
+			
+		</div>
+		
+		<table class="table table-bordered">
+		  <thead>
+		    <tr>
+		      <th scope="col">#</th>
+		      <th scope="col">S_id</th>
+		      <th scope="col">Name</th>
+		      <th scope="col">Age</th>
+		      <th scope="col">Sex</th>
+		      <th scope="col">From</th>
+		      <th scope="col">Alive</th>
+		    </tr>
+		  </thead>
+		  <tbody>
+		  	<% for (var i = 0; i < survivors.length; i++) { -%>
+		  		<tr>
+			      <th scope="row"><%=i+1%></th>
+			      <td><%=survivors[i].survivor_id%></td>
+			      <td><%=survivors[i].fname%></td>
+			      <td><%=survivors[i].age%></td>
+			      <td><%=survivors[i].sex%></td>
+			      <td><%=survivors[i].city%></td>
+			      <td>True</td>
+			    </tr>
+		  	<% } -%>
+		    
+		    
+		  </tbody>
+		</table>
+		<br><br><br>
+	</div>
+	
+	
+</body>
+</html>
