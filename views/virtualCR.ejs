@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>DRMS</title>
+	<link rel="shortcut icon" href="/logo.ico" />
+	<link rel="stylesheet" href="/css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="/mycss/campinfo.css">
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	<script type="text/javascript" src="/myjs/campinfo.js"></script>
+
+</head>
+<nav class="navbar navbar-expand-lg navbar-inverse bg-dark fixed-top" >
+  <a class="navbar-brand" href="#"><img src="/logo.png" style="display: inline-block;height:40px;width:40px;">DRMS</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Link</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Dropdown
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="#">Action</a>
+          <a class="dropdown-item" href="#">Another action</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#">Something else here</a>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link disabled" href="#">Disabled</a>
+      </li>
+    </ul>
+    <form class="form-inline my-2 my-lg-0">
+      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+  </div>
+</nav>
+<body style="background-color:  #f7f9f9">
+  <br>
+  <div class="container " style="text-align: center;">
+    <br><br><br>
+    <h2 style="text-align: center;">Virtual Control Room</h2>
+    <hr>
+    <div class="row" style="text-align: center;">
+      <div class="col-sm-6" style="border-right: 1px solid #D3D3D3;">
+        <h4>Resource Stats</h4>
+        <hr>
+        <div style="width: 60%;margin:0 auto;border:1px solid #D3D3D3;">
+          <a href="">Available Resources</a><br>
+          <hr>
+          <a href="">Requested Resources</a><br>
+          <hr>
+          <a href="">Allocated Resources</a><br>
+          <hr>
+          Funds collected : 34,99,14,446 &#x20B9;
+
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <h4>Disaster Stats</h4>
+        <hr>
+        <table class="table table-hover table-dark" style="width: 80%;margin: 0 auto;">
+          <thead>
+            <tr>
+              
+              <th scope="col">Criteria</th>
+              <th scope="col">Count</th>
+              
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              
+              <td>Survivor count</td>
+              <td>13,354</td>
+              
+            </tr>
+            <tr>
+              
+              <td>Number of Camps</td>
+              <td>121</td>
+              
+            </tr>
+            <tr>
+              
+              <td >Missing Reports</td>
+              <td>894</td>
+            </tr>
+          </tbody>
+        </table>
+        
+
+
+      </div>
+    </div>
+
+    <hr>
+    
+
+
+    <hr>
+    
+    <br>
+    <h4>Rescue Camp List</h4>
+    <hr>
+    <div class="filter" style="text-align: center;">
+      <form  style="text-align: center;">
+        <strong>Sort By : </strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        Order :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <select name="order">
+          <option value="0">---Select Order---</option>
+          <option value="1">Ascending</option>
+          <option value="2">Descending</option>
+        </select>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        Property :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+        <select name="property">
+          <option value="0">---Select Property---</option>
+          <option value="1">Survivor count</option>
+          <option value="2">Threat level</option>
+        </select>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <button class="btn btn-primary btn-sm">Sort</button>
+      </form>
+      
+    </div>
+    <hr>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Camp_id</th>
+          <th scope="col">Admin_id</th>
+          <th scope="col">location</th>
+          <th scope="col">Threat level</th>
+          <th scope="col">Active from</th>
+          <th scope="col">Survivor Count</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% for (var i = 0; i < camp.length; i++) { -%>
+          <tr>
+            <th scope="row"><%=i+1%></th>
+            <td><%=camp[i].camp_id%></td>
+            <td><%=camp[i].admin_id%></td>
+            <td><%=camp[i].location%></td>
+            <td><%=camp[i].threat_level%></td>
+            <td><%=camp[i].active_from%></td>
+            <td><%=camp[i].survivor_count%></td>
+          </tr>
+        <% } -%>
+        
+        
+      </tbody>
+    </table>
+    <br><br>
+    <h4>Survivor list</h4>
+    <hr>
+    <div class="filter">
+      <form action="/virtualcr/survivor/filter" method="POST">
+        <strong>Filter By&nbsp;&nbsp;&nbsp; </strong> 
+        Sex :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <select name = "gender">
+          <option value = "0">--SELECT Gender--</option>
+          <option value = "1">Male</option>
+          <option value = "2">female</option>
+        </select>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+         Age :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+         <select name = "age">
+          <option value = "0">--SELECT Age--</option>
+          <option value = "1">10-20 yrs</option>
+          <option value="2">20-30 yrs</option>
+          <option value="3">30-40 yrs</option>
+          <option value="4">40-50 yrs</option>
+          <option value="5">50-60 yrs</option>
+          <option value="6">60+ yrs</option>
+        </select>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+         From :&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="city"  placeholder="city">
+         &nbsp;&nbsp;&nbsp;&nbsp;<button class="btn btn-success btn-sm" type="submit">Filter</button>
+        <br><br>
+        
+      </form>
+      
+    </div>
+    
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">S_id</th>
+          <th scope="col">Name</th>
+          <th scope="col">Age</th>
+          <th scope="col">Sex</th>
+          <th scope="col">From</th>
+          <th scope="col">Alive</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% for (var i = 0; i < survivors.length; i++) { -%>
+          <tr>
+            <th scope="row"><%=i+1%></th>
+            <td><%=survivors[i].survivor_id%></td>
+            <td><%=survivors[i].fname%></td>
+            <td><%=survivors[i].age%></td>
+            <td><%=survivors[i].sex%></td>
+            <td><%=survivors[i].city%></td>
+            <td>True</td>
+          </tr>
+        <% } -%>
+        
+        
+      </tbody>
+    </table>
+    <br><br><br>
+    
+  </div>
+</body>
+</html>

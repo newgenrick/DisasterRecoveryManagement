@@ -55,10 +55,110 @@ app.get("/",function(req,res){
 	})
 });
 app.get("/query",function(req,res){
-	res.render("query.ejs")
+	query = "SELECT * FROM survivor;"
+	connection.query(query,function(error,survivors,fields){
+		if(error){
+			console.log(error)
+			console.log("Error retrieving survivors data")
+		}else{
+			res.render("query.ejs",{survivor:survivors,flag:0})
+		}
+	})
+	
+})
+app.post("/query",function(req,res){
+	cond1 = "fname=\""+req.body.fname+"\""
+	cond2 = "sname=\""+req.body.sname+"\""
+	cond3 = "age="+req.body.age
+	cond4 = "sex=\""+req.body.sex+"\""
+	cond5 = "city=\""+req.body.city+"\""
+	squery = "SELECT * FROM survivor WHERE " +cond1 +" AND "+cond2+" AND "+cond3+" AND "+cond4+" AND "+cond5
+	console.log(squery)
+	connection.query(squery,function(error,survivors,fields){
+		if(error){
+			console.log(error)
+			console.log("Error retrieving survivors data")
+		}else{
+			res.render("query.ejs",{survivor:survivors,flag:1})
+		}
+	})
+
+})
+app.post("/query/filter",function(req,res){
+	var cond1 = req.body.gender
+	var cond2 = req.body.age
+	var cond3 = req.body.city
+	var squery = "SELECT * FROM survivor WHERE survivor_id IS NOT NULL" 
+	if(cond1!="0"){
+		if(cond1=="1"){
+			squery+=" And sex =\"male\" "
+		}else{
+			squery+=" And sex =\"female\" "
+		}
+	}
+	if(cond2!="0"){
+		if(cond2 == "1"){
+			squery+=" And age BETWEEN 10 AND 20"
+		}
+		else if(cond2 == "2"){
+			squery+=" And age BETWEEN 20 AND 30"
+		}
+		else if(cond2 == "3"){
+			squery+=" And age BETWEEN 30 AND 40"
+		}
+		else if(cond2 == "4"){
+			squery+=" And age BETWEEN 40 AND 50"
+		}
+		else if(cond2 == "5"){
+			squery+=" And age BETWEEN 40 AND 60"
+		}
+		else if(cond2 == "6"){
+			squery+=" And age>60"
+		}
+
+	}
+	if(cond3!=""){
+		squery+=" And city = \""+cond3+"\""
+	}
+	squery+=";"
+	console.log(squery)
+	connection.query(squery,function(error,survivors,fields){
+		if(error){
+			console.log(error)
+			console.log("Error retrieving survivors data")
+		}else{
+			res.render("query.ejs",{survivor:survivors,flag:0})
+		}
+	})
+
 })
 app.get("/query/notfound",function(req,res){
 	res.render("notfound.ejs")
+})
+app.post("/query/notfound",function(req,res){
+	var query = "INSERT INTO missing_list VALUES ("+
+						"\""+req.body.fname +"\""+" ,"+
+						"\""+req.body.sname +"\""+" ,"+
+						Number(req.body.age) + " ,"+
+						"\""+req.body.sex +"\""+" ,"+
+						"\""+req.body.city +"\""+" ,"+
+						Number(req.body.zip) +" ,"+
+						"\""+req.body.state +"\""+" ,"+
+						"\""+req.body.email_id+"\""+");";
+	console.log(query)
+
+	connection.query(query,function(error,report){
+		if(error){
+			console.log(error)
+		}else{
+			console.log("Missing report filed")
+			console.log(report)
+			res.redirect("/query")
+		}
+	})
+
+
+
 })
 app.get("/camp/new",function(req,res){
 	res.render("campRegistration.ejs");
@@ -396,6 +496,28 @@ app.post("/camp/:id/new",function(req,res){
 	})
 })
 
+app.get("/virtualcr",function(req,res){
+	query = "SELECT * FROM camp"
+	connection.query(query,function(error,camps,fields){
+		if(error){
+			console.log(error)
+			console.log("Not able to retrieve camp info.")
+		}else{
+			console.log(camps)
+			squery = "SELECT * FROM survivor"
+			connection.query(squery,function(error,survivors,fields){
+				if(error){
+					console.log(error)
+					res.redirect("/")
+				}else{
+					res.render("virtualCR.ejs",{camp:camps,
+												survivors:survivors})
+				}
+			})
+			
+		}
+	})
+})
 
 
 app.listen(1111);
