@@ -51,21 +51,36 @@
   <div class="container " style="text-align: center;">
     <br><br><br>
     <h2 style="text-align: center;">Virtual Control Room</h2>
+        <div class="card">
+      <div class="card-header">
+        A virtual control room to manage all disaster recovery related operations.
+      </div>
+      
+    </div>
     <hr>
     <div class="row" style="text-align: center;">
       <div class="col-sm-6" style="border-right: 1px solid #D3D3D3;">
         <h4>Resource Stats</h4>
         <hr>
-        <div style="width: 60%;margin:0 auto;border:1px solid #D3D3D3;">
+        <div class="card" style="width: 18rem;margin: 0 auto;">
+          
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item"><a href="">Available Resources</a><br></li>
+            <li class="list-group-item"><a href="">Requested Resources</a></li>
+            <li class="list-group-item"><a href="">Allocated Resources</a></li>
+            <li class="list-group-item">Funds collected : &#x20B9;34,99,14,446</li>
+          </ul>
+        </div>
+        <!-- <div style="width: 60%;margin:0 auto;border:1px solid #D3D3D3;">
           <a href="">Available Resources</a><br>
           <hr>
           <a href="">Requested Resources</a><br>
           <hr>
           <a href="">Allocated Resources</a><br>
           <hr>
-          Funds collected : 34,99,14,446 &#x20B9;
+          Funds collected : &#x20B9;34,99,14,446
 
-        </div>
+        </div> -->
       </div>
       <div class="col-sm-6">
         <h4>Disaster Stats</h4>
@@ -83,13 +98,13 @@
             <tr>
               
               <td>Survivor count</td>
-              <td>13,354</td>
+              <td><%=survivors.length%></td>
               
             </tr>
             <tr>
               
               <td>Number of Camps</td>
-              <td>121</td>
+              <td><%=camp.length%></td>
               
             </tr>
             <tr>
@@ -110,12 +125,21 @@
 
 
     <hr>
+    <div class="filter">
+      <form action="/virtualcr/allocate" method="POST">
+        <strong>Allocate Resource to : </strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <input type="text" name="cid" placeholder="Camp ID here..">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <button class="btn btn-warning btn-sm">Go to allocation page</button>
+      </form>
+      
+    </div>
+    <hr>
     
     <br>
     <h4>Rescue Camp List</h4>
     <hr>
     <div class="filter" style="text-align: center;">
-      <form  style="text-align: center;">
+      <form  action="/virtualcr/sort" method="POST" style="text-align: center;">
         <strong>Sort By : </strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         Order :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <select name="order">
@@ -167,7 +191,7 @@
     <h4>Survivor list</h4>
     <hr>
     <div class="filter">
-      <form action="/virtualcr/survivor/filter" method="POST">
+      <form action="/virtualcr/filter" method="POST">
         <strong>Filter By&nbsp;&nbsp;&nbsp; </strong> 
         Sex :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <select name = "gender">

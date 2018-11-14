@@ -16,7 +16,7 @@ var campResourceSchema = new mongoose.Schema({
 var CampResource = mongoose.model("CampResource",campResourceSchema)
 
 CampResource.create({
-	Cid : "CID00001",
+	Cid : "CID00002",
 	requested : [],
 	allocated : []
 })

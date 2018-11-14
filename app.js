@@ -3,7 +3,7 @@ var app                   = express()
 var mysql 				  = require('mysql')
 var bodyParser            = require("body-parser");
 var request               = require("request");
-
+var nodemailer            = require('nodemailer');
 app.use(express.static(__dirname+"/public"));
 app.use(bodyParser.urlencoded({extended:true}));
 
@@ -40,6 +40,15 @@ var campResourceSchema = new mongoose.Schema({
 var CampResource = mongoose.model("CampResource",campResourceSchema)
 
 console.log("Voila!!")
+
+
+var transporter = nodemailer.createTransport({
+ service: 'gmail',
+ auth: {
+        user: 'newgenrick@gmail.com',
+        pass: 'aerolithology'
+    }
+});
 
 
 app.get("/",function(req,res){
@@ -160,12 +169,35 @@ app.post("/query/notfound",function(req,res){
 
 
 })
-app.get("/camp/new",function(req,res){
-	res.render("campRegistration.ejs");
+app.get("/adminlogin",function(req,res){
+	res.render("adminlogin.ejs")
+})
+app.post("/adminlogin",function(req,res){
+	var query = "SELECT * FROM camp_admin WHERE admin_id = \""+req.body.admin_id+"\";"
+	console.log(query)
+	connection.query(query,function(error,admin,fields){
+		if(error){
+			console.log("error")
+			console.log("not able to find admin details");
+			res.redirect("/adminlogin")
+		}else{
+			console.log(admin)
+			if(admin[0].password!=req.body.password){
+				console.log(admin[0].password)
+				console.log(req.body.password)
+				res.redirect("/adminlogin")
+			}else{
+				res.redirect("/camp/new/"+admin[0].admin_id)
+			}
+		}
+	}) 
+})
+app.get("/camp/new/:id",function(req,res){
+	res.render("campRegistration.ejs",{admin_id:req.params.id});
 });
 
 
-app.post("/camp/new",function(req,res){
+app.post("/camp/new/:id",function(req,res){
 	
 				var cid = ""
 				connection.query("SELECT * FROM camp;",function(error,camps,fields){
@@ -176,26 +208,33 @@ app.post("/camp/new",function(req,res){
 
 						cid = "CID"+String(camps.length+1000000)
 						console.log(cid)
-						
+						var active_from = String(new Date())
 						var query1 = "INSERT INTO camp VALUES (\""+
 									cid+"\""+","+
-									"\""+req.body.admin_id+"\""+" ,"+
+									"\""+req.params.id+"\""+" ,"+
 									"\""+req.body.location +"\""+" ,"+
 									"\""+req.body.longitude +"\""+" ,"+
 									"\""+req.body.latitude +"\""+" ,"+
-									"\""+req.body.threat_level +"\""+" ,"+
-									"\""+req.body.active_from +"\""+" ,"+
+									"\""+req.body.threat +"\""+" ,"+
+									"\""+active_from +"\""+" ,"+
 									0 +" ,"+
-									req.body.password + ");";
-
+									"\""+req.body.password +"\""+ ");";
+						console.log(query1)
 						connection.query(query1,function(error,camp){
 							if(error){
-								console.log(query)
+								console.log(query1)
 								console.log("Error\n" +error);
+
 							}else{
 								console.log("adding new camp...")
-								console.log(query)
-								res.redirect("/camp/"+req.params.id)
+								console.log(query1)
+								CampResource.create({
+									Cid : cid,
+									requested : [],
+									allocated : []
+								})
+								res.redirect("/camp/"+cid)
+
 							}
 						})
 					}
@@ -250,13 +289,22 @@ app.get("/camp/:id",function(req,res){
 											console.log("Cannot find camp resources")
 											console.log(err)
 										}else{
-											res.render("campinfo.ejs",{camp:foundcamp[0],
+											connection.query("SELECT * FROM camp_admin WHERE admin_id=\""+foundcamp[0].admin_id+"\";",function(error,admin,fields){
+												if(error){
+													console.log(error)
+												}else{
+													res.render("campinfo.ejs",{
+																camp       :foundcamp[0],
 																survivors  :survivors,
 																resource   :resources,
 																cat        :category,
 																requested  :obj.requested,
-																allocated  :obj.allocated
+																allocated  :obj.allocated,
+																admin_name :admin[0].fname
 															});
+												}
+											})
+											
 										}
 
 									})
@@ -362,6 +410,7 @@ app.post("/camp/:id/request",function(req,res){
 					}
 					console.log(obj)
 					obj.save()
+					res.redirect("/camp/"+req.params.id+"/request")
 				}
 			})
 
@@ -489,7 +538,33 @@ app.post("/camp/:id/new",function(req,res){
 				}else{
 					console.log("adding new survivor...")
 					console.log(query)
-					res.redirect("/camp/"+req.params.id)
+					var missingquery = "SELECT * FROM missing_list WHERE fname = \""+req.body.fname +"\""+" AND sname=\""+req.body.sname +"\""+" AND age="+req.body.age+";"
+					console.log(missingquery)
+					connection.query(missingquery,function(error,report,fields){
+						console.log(report)
+						if(report.length>0){
+							var htmlMessage = '<h3>update on '+ report[0].fname+ "\'s Missing report,</h3> <p>A similar survivor data has been recorded in our database, please check survivor query page to confirm identity of survivor <a href=\"/query\">here</a>.</p>"
+				             reciever = report[0].email_id
+				             console.log(reciever)
+				             var mailOptions = {
+				            
+				              from: '"DRMS INDIA" newgenrick@gmail.com', // sender address
+				              to: reciever , // list of receivers
+				              subject: 'Missing report update', // Subject line
+				              html: htmlMessage// plain text body
+				            };
+				            transporter.sendMail(mailOptions, function (err, info) {
+				               if(err)
+				                 console.log(err)
+				               else
+				                 console.log(info);
+				            }); 
+						}else{
+							res.redirect("/camp/"+req.params.id)
+						}
+					})
+					
+					
 				}
 			})
 		}
@@ -518,6 +593,159 @@ app.get("/virtualcr",function(req,res){
 		}
 	})
 })
+app.post("/virtualcr/sort",function(req,res){
+	console.log("sort route")
+	var cond1 = req.body.order 
+	var cond2 = req.body.property
+	sortquery = "SELECT * FROM camp ORDER BY "
+	if(cond2=="1"){
+		sortquery+="survivor_count "
+	}else{
+		sortquery+="threat_level "
+	}
+	if(cond1=="1"){
+		sortquery+="ASC"
+	}else{
+		sortquery+="DSC"
+	}
+	console.log(sortquery)
+	connection.query(sortquery,function(error,camps,fields){
+		if(error){
+			console.log(error)
+			console.log("Not able to retrieve camp info.")
+		}else{
+			console.log(camps)
+			squery = "SELECT * FROM survivor"
+			connection.query(squery,function(error,survivors,fields){
+				if(error){
+					console.log(error)
+					res.redirect("/")
+				}else{
+					res.render("virtualCR.ejs",{camp:camps,
+												survivors:survivors})
+				}
+			})
+			
+		}
+	})
+})
+app.post("/virtualcr/filter",function(req,res){
+	var cond1 = req.body.gender
+	var cond2 = req.body.age
+	var cond3 = req.body.city
+	var squery = "SELECT * FROM survivor WHERE camp_id IS NOT NULL" 
+	if(cond1!="0"){
+		if(cond1=="1"){
+			squery+=" And sex =\"male\" "
+		}else{
+			squery+=" And sex =\"female\" "
+		}
+	}
+	if(cond2!="0"){
+		if(cond2 == "1"){
+			squery+=" And age BETWEEN 10 AND 20"
+		}
+		else if(cond2 == "2"){
+			squery+=" And age BETWEEN 20 AND 30"
+		}
+		else if(cond2 == "3"){
+			squery+=" And age BETWEEN 30 AND 40"
+		}
+		else if(cond2 == "4"){
+			squery+=" And age BETWEEN 40 AND 50"
+		}
+		else if(cond2 == "5"){
+			squery+=" And age BETWEEN 40 AND 60"
+		}
+		else if(cond2 == "6"){
+			squery+=" And age>60"
+		}
+
+	}
+	if(cond3!=""){
+		squery+=" And city = \""+cond3+"\""
+	}
+	squery+=";"
+	console.log(squery)
+	query = "SELECT * FROM camp"
+	connection.query(query,function(error,camps,fields){
+		if(error){
+			console.log(error)
+			console.log("Not able to retrieve camp info.")
+		}else{
+			console.log(camps)
+			//squery = "SELECT * FROM survivor"
+			connection.query(squery,function(error,survivors,fields){
+				if(error){
+					console.log(error)
+					res.redirect("/")
+				}else{
+					res.render("virtualCR.ejs",{camp:camps,
+												survivors:survivors})
+				}
+			})
+			
+		}
+	})
+})
+app.post("/virtualcr/allocate",function(req,res){
+	cid = req.body.cid
+	res.redirect("/virtualcr/allocate/"+cid)
+
+})
+app.get("/virtualcr/allocate/:id",function(req,res){
+	CampResource.findOne({Cid:req.params.id},function(err,obj){
+		if(err){
+			console.log("Cannot find camp resources")
+			console.log(err)
+		}else{
+			res.render("allocation.ejs",{
+				requested : obj.requested,
+				allocated : obj.allocated,
+				camp_id   : req.params.id
+			})
+		}
+	})
+})
+app.post("/virtualcr/allocate/:id",function(req,res){
+	CampResource.findOne({Cid:req.params.id},function(err,obj){
+		if(err){
+			console.log("Cannot find camp resources")
+			console.log(err)
+			res.redirect("/virtualcr")
+		}else{
+			for(var i=0;i<obj.requested.length;i++){
+				if(Number(req.body[obj.requested[i].Rid])>0){
+					obj.requested[i].quantity-=Number(req.body[obj.requested[i].Rid])
+					var flag=0
+					for(var j=0 ;j<obj.allocated.length;j++){
+						if(obj.requested[i].Rid==obj.allocated[j].Rid){
+							flag=1
+							obj.allocated[i].quantity+=Number(req.body[obj.requested[i].Rid])
+							break
+						}
+					}
+					if(flag==0){
+						obj.allocated.push({
+							Rid      : obj.requested[i].Rid,
+							imp      : obj.requested[i].imp,
+							quantity : Number(req.body[obj.requested[i].Rid]),
+							name     : obj.requested[i].name,
+							category : obj.requested[i].category
+						})
+					}
+				}
+			}
+			console.log(obj)
+			obj.save()
+			res.redirect("/virtualcr/allocate/"+req.params.id)
+		}
+	})
+})
+app.get("*",function(req,res){
+	res.render("error.ejs")
+})
+
 
 
 app.listen(1111);
