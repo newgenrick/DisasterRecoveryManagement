@@ -166,14 +166,20 @@
 			  <tbody>
 			  	<% if(requested.length!=0){-%>
 				  	<% for (var i = 0; i < requested.length; i++) { -%>
-				  		<tr>
-					      <th scope="row"><%=i+1%></th>
-					      <td><%=requested[i].Rid%></td>
-					      <td><%=requested[i].name%></td>
-					      <td><%=requested[i].category%></td>
-					      <td><%=requested[i].imp%></td>
-					      <td><%=requested[i].quantity%></td>
-					    </tr>
+
+				  		<% if (Number(requested[i].quantity)>0) { -%>
+				  			
+				  			<tr>
+						      <th scope="row"><%=i+1%></th>
+						      <td><%=requested[i].Rid%></td>
+						      <td><%=requested[i].name%></td>
+						      <td><%=requested[i].category%></td>
+						      <td><%=requested[i].imp%></td>
+						      <td><%=requested[i].quantity%></td>
+						    </tr>
+					  			
+				  		<% } -%>
+				  		
 				  	<% } -%>
 				<% }else{ -%>
 					<br>
@@ -207,7 +213,13 @@
 		    </div>
 		    <div class="form-group col-md-6">
 		      <label for="inputEmail4">Sex</label>
-		      <input type="text" class="form-control" id="inputEmail4" placeholder="Sex" name="sex" required>
+<!-- 		      <input type="text" class="form-control" id="inputEmail4" placeholder="Sex" name="sex" required>
+ -->		      <select name = "sex" class="form-control" id="inputEmail4" required >
+					<option value = "other">--SELECT Gender--</option>
+					<option value = "male">Male</option>
+					<option value = "female">female</option>
+					<option value = "other">Others</option>
+				</select>
 		    </div>
 		    <div class="form-group col-md-6">
 		      <label for="inputPassword4">Age</label>

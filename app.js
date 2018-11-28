@@ -50,9 +50,16 @@ var transporter = nodemailer.createTransport({
     }
 });
 
-
+function hash(str){
+	var h = 0
+	for(var i = 0;i<str.length;i++){
+		h=h+str.charCodeAt(i)*str.charCodeAt(i)
+	}
+	return h
+}
 app.get("/",function(req,res){
 	
+	console.log(hash("abhi"))
 	connection.query("SELECT * FROM camp",function(error,rows,fields){
 		if(error){
 			console.log("Error");
@@ -218,7 +225,7 @@ app.post("/camp/new/:id",function(req,res){
 									"\""+req.body.threat +"\""+" ,"+
 									"\""+active_from +"\""+" ,"+
 									0 +" ,"+
-									"\""+req.body.password +"\""+ ");";
+									"\""+hash(req.body.password) +"\""+ ");";
 						console.log(query1)
 						connection.query(query1,function(error,camp){
 							if(error){
@@ -250,7 +257,7 @@ app.post("/camp/login",function(req,res){
 			res.redirect("/camp/login")
 		}else{
 			console.log(req.body.cid +" : "+camp[0].password)
-			if(camp[0].password===req.body.password){
+			if(camp[0].password==hash(req.body.password)){
 				res.redirect("/camp/"+req.body.cid)
 			}else{
 				console.log("Wrong password");
@@ -486,13 +493,21 @@ app.post("/camp/:id/filter",function(req,res){
 											console.log("Cannot find camp resources")
 											console.log(err)
 										}else{
-											res.render("campinfo.ejs",{camp:foundcamp[0],
+											connection.query("SELECT * FROM camp_admin WHERE admin_id=\""+foundcamp[0].admin_id+"\";",function(error,admin,fields){
+												if(error){
+													console.log(error)
+												}else{
+													res.render("campinfo.ejs",{
+																camp       :foundcamp[0],
 																survivors  :survivors,
 																resource   :resources,
 																cat        :category,
 																requested  :obj.requested,
-																allocated  :obj.allocated
+																allocated  :obj.allocated,
+																admin_name :admin[0].fname
 															});
+												}
+											})
 										}
 
 									})
@@ -606,7 +621,7 @@ app.post("/virtualcr/sort",function(req,res){
 	if(cond1=="1"){
 		sortquery+="ASC"
 	}else{
-		sortquery+="DSC"
+		sortquery+="DESC"
 	}
 	console.log(sortquery)
 	connection.query(sortquery,function(error,camps,fields){
