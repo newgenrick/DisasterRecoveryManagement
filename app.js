@@ -46,7 +46,7 @@ var transporter = nodemailer.createTransport({
  service: 'gmail',
  auth: {
         user: 'newgenrick@gmail.com',
-        pass: 'aerolithology'
+        pass: ''
     }
 });
 
