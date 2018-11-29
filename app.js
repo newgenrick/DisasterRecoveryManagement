@@ -152,26 +152,39 @@ app.get("/query/notfound",function(req,res){
 	res.render("notfound.ejs")
 })
 app.post("/query/notfound",function(req,res){
-	var query = "INSERT INTO missing_list VALUES ("+
-						"\""+req.body.fname +"\""+" ,"+
-						"\""+req.body.sname +"\""+" ,"+
-						Number(req.body.age) + " ,"+
-						"\""+req.body.sex +"\""+" ,"+
-						"\""+req.body.city +"\""+" ,"+
-						Number(req.body.zip) +" ,"+
-						"\""+req.body.state +"\""+" ,"+
-						"\""+req.body.email_id+"\""+");";
-	console.log(query)
+					var mquery = "SELECT * FROM missing_list;"
+					connection.query(mquery,function(error,missing,fields){
+						if(error){
+							res.redirect("/query/notfound")
+						}else{
+							mid = 10000 + missing.length
+							mid = "MID"+String(mid)
+							var query = "INSERT INTO missing_list VALUES ("+
+												"\""+mid +"\""+" ,"+
+												"\""+req.body.fname +"\""+" ,"+
+												"\""+req.body.sname +"\""+" ,"+
+												Number(req.body.age) + " ,"+
+												"\""+req.body.sex +"\""+" ,"+
+												"\""+req.body.city +"\""+" ,"+
+												Number(req.body.zip) +" ,"+
+												"\""+req.body.state +"\""+" ,"+
+												"\""+req.body.email_id+"\""+");";
+							console.log(query)
 
-	connection.query(query,function(error,report){
-		if(error){
-			console.log(error)
-		}else{
-			console.log("Missing report filed")
-			console.log(report)
-			res.redirect("/query")
-		}
-	})
+							connection.query(query,function(error,report){
+								if(error){
+									console.log(error)
+								}else{
+									console.log("Missing report filed")
+									console.log(report)
+									res.redirect("/query")
+								}
+							})
+							
+						}
+					})
+
+	
 
 
 
@@ -565,15 +578,20 @@ app.post("/camp/:id/new",function(req,res){
 				            
 				              from: '"DRMS INDIA" newgenrick@gmail.com', // sender address
 				              to: reciever , // list of receivers
-				              subject: 'Missing report update', // Subject line
+				              subject: 'Missing report update : '+report[0].rep_id, // Subject line
 				              html: htmlMessage// plain text body
 				            };
 				            transporter.sendMail(mailOptions, function (err, info) {
-				               if(err)
+				               if(err){
 				                 console.log(err)
-				               else
+				                 res.redirect("/camp/"+req.params.id)
+				               }
+				               else{
 				                 console.log(info);
+				                 res.redirect("/camp/"+req.params.id)
+				               }
 				            }); 
+				            res.redirect("/camp/"+req.params.id)
 						}else{
 							res.redirect("/camp/"+req.params.id)
 						}
@@ -600,8 +618,16 @@ app.get("/virtualcr",function(req,res){
 					console.log(error)
 					res.redirect("/")
 				}else{
-					res.render("virtualCR.ejs",{camp:camps,
-												survivors:survivors})
+					var mquery = "SELECT * FROM missing_list;"
+					connection.query(mquery,function(error,missing,fields){
+						if(error){
+							res.redirect("/")
+						}else{
+							res.render("virtualCR.ejs",{camp:camps,
+												survivors:survivors,
+												missing:missing})
+						}
+					})
 				}
 			})
 			
@@ -636,8 +662,17 @@ app.post("/virtualcr/sort",function(req,res){
 					console.log(error)
 					res.redirect("/")
 				}else{
-					res.render("virtualCR.ejs",{camp:camps,
-												survivors:survivors})
+					var mquery = "SELECT * FROM missing_list;"
+					connection.query(mquery,function(error,missing,fields){
+						if(error){
+							res.redirect("/")
+						}else{
+							res.render("virtualCR.ejs",{camp:camps,
+												survivors:survivors,
+												missing:missing})
+						}
+					})
+					
 				}
 			})
 			
@@ -695,19 +730,53 @@ app.post("/virtualcr/filter",function(req,res){
 					console.log(error)
 					res.redirect("/")
 				}else{
-					res.render("virtualCR.ejs",{camp:camps,
-												survivors:survivors})
+					var mquery = "SELECT * FROM missing_list;"
+					connection.query(mquery,function(error,missing,fields){
+						if(error){
+							res.redirect("/")
+						}else{
+							res.render("virtualCR.ejs",{camp:camps,
+												survivors:survivors,
+												missing:missing})
+						}
+					})
 				}
 			})
 			
 		}
 	})
 })
+app.get("/virtualcr/resourcestat",function(req,res){
+	//res.render("resourcestat.ejs")
+	query = "SELECT * FROM resource_list"
+	connection.query(query,function(error,resr,fields){
+		if(error){
+			console.log("Not able to find resource stats")
+			res.redirect("/virtualcr")
+		}else{
+			res.render("resourcestat.ejs",{resource:resr});
+		}
+	})
+})
+// app.get("/virtualcr/resourcestat",function(req,res){
+// 	//res.send("fuck")
+// 	res.render("resourcestat.ejs");
+// 	query = "SELECT * FROM resource_list;"
+// 	connection.query(query,function(error,res,fields){
+// 		if(error){
+// 			console.log("Not able to find resource stats")
+// 			res.redirect("/virtualcr")
+// 		}else{
+// 			res.render("resourcestat.ejs",{res:res});
+// 		}
+// 	})
+// })
 app.post("/virtualcr/allocate",function(req,res){
 	cid = req.body.cid
 	res.redirect("/virtualcr/allocate/"+cid)
 
 })
+
 app.get("/virtualcr/allocate/:id",function(req,res){
 	CampResource.findOne({Cid:req.params.id},function(err,obj){
 		if(err){

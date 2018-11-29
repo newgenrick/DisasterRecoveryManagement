@@ -12,7 +12,7 @@
 
 </head>
 <nav class="navbar navbar-expand-lg navbar-inverse bg-dark fixed-top" >
-  <a class="navbar-brand" href="#"><img src="/logo.png" style="display: inline-block;height:40px;width:40px;">DRMS</a>
+  <a class="navbar-brand" href="/"><img src="/logo.png" style="display: inline-block;height:40px;width:40px;">DRMS</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -20,7 +20,7 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="#">Link</a>
@@ -65,9 +65,9 @@
         <div class="card" style="width: 18rem;margin: 0 auto;">
           
           <ul class="list-group list-group-flush">
-            <li class="list-group-item"><a href="">Available Resources</a><br></li>
-            <li class="list-group-item"><a href="">Requested Resources</a></li>
-            <li class="list-group-item"><a href="">Allocated Resources</a></li>
+            <li class="list-group-item"><a href="/virtualcr/resourcestat">Available Resources</a><br></li>
+            <li class="list-group-item"><a href="/virtualcr/resourcestat">Requested Resources</a></li>
+            <li class="list-group-item"><a href="/virtualcr/resourcestat">Allocated Resources</a></li>
             <li class="list-group-item">Funds collected : &#x20B9;34,99,14,446</li>
           </ul>
         </div>
@@ -110,7 +110,7 @@
             <tr>
               
               <td >Missing Reports</td>
-              <td>894</td>
+              <td><%=missing.length%></td>
             </tr>
           </tbody>
         </table>
