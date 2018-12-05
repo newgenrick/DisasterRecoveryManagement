@@ -55,6 +55,11 @@
     <div class="row text-center">
         
         <div style="width:35%; margin: 27px auto;">
+          <% if (er.length>0) { -%>
+      <div class="alert alert-success" role="alert">
+      <%=er%>
+    </div>  
+    <% } -%>
             <h2>Admin login for camp registration</h2><br>
             <hr>
             <form action="/adminlogin" method = "POST">

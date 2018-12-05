@@ -4,8 +4,23 @@ var mysql 				  = require('mysql')
 var bodyParser            = require("body-parser");
 var request               = require("request");
 var nodemailer            = require('nodemailer');
+var session               = require("express-session");
+var flash                 = require("connect-flash");
+var cookieParser          = require("cookie-parser")
+
 app.use(express.static(__dirname+"/public"));
+
+
+app.set('view engine', 'jade');
+
 app.use(bodyParser.urlencoded({extended:true}));
+app.use(cookieParser());
+app.use(session({
+    secret: "ironfist",
+    resave:false,
+    saveUninitialized: false
+}));
+app.use(flash());
 
 var connection = mysql.createConnection({
 	host: 'localhost',
@@ -46,7 +61,7 @@ var transporter = nodemailer.createTransport({
  service: 'gmail',
  auth: {
         user: 'newgenrick@gmail.com',
-        pass: ''
+        pass: 'aerolithology'
     }
 });
 
@@ -190,7 +205,7 @@ app.post("/query/notfound",function(req,res){
 
 })
 app.get("/adminlogin",function(req,res){
-	res.render("adminlogin.ejs")
+	res.render("adminlogin.ejs",{er:""})
 })
 app.post("/adminlogin",function(req,res){
 	var query = "SELECT * FROM camp_admin WHERE admin_id = \""+req.body.admin_id+"\";"
@@ -202,13 +217,18 @@ app.post("/adminlogin",function(req,res){
 			res.redirect("/adminlogin")
 		}else{
 			console.log(admin)
-			if(admin[0].password!=req.body.password){
-				console.log(admin[0].password)
-				console.log(req.body.password)
-				res.redirect("/adminlogin")
+			if(admin.length==0){
+				res.render("adminlogin.ejs",{er:"Invalid Admin ID"})
 			}else{
-				res.redirect("/camp/new/"+admin[0].admin_id)
+				if(admin[0].password!=req.body.password){
+					console.log(admin[0].password)
+					console.log(req.body.password)
+					res.render("adminlogin.ejs",{er:"Wrong ID or Password"})
+				}else{
+					res.redirect("/camp/new/"+admin[0].admin_id)
+				}
 			}
+			
 		}
 	}) 
 })
@@ -260,22 +280,37 @@ app.post("/camp/new/:id",function(req,res){
 					}
 				})
 })
+var msg = ""
 app.get("/camp/login",function(req,res){
-	res.render("campAdminLogin.ejs");
+	
+	res.render("campAdminLogin.ejs",{er:msg});
 });
 app.post("/camp/login",function(req,res){
 	connection.query("SELECT * FROM camp where camp_id = \""+req.body.cid+"\";",function(error,camp,fields){
 		if(error){
 			console.log(error)
+
 			res.redirect("/camp/login")
 		}else{
-			console.log(req.body.cid +" : "+camp[0].password)
-			if(camp[0].password==hash(req.body.password)){
-				res.redirect("/camp/"+req.body.cid)
+			if(camp.length==0){
+				// req.flash('error','Invalid Camp ID')
+				// console.log(req.flash("error")[0])
+				msg = "Invalid camp ID"
+				res.render("campAdminLogin.ejs",{er:msg})
+				msg = ""
 			}else{
-				console.log("Wrong password");
-				res.redirect("/camp/login")
+				console.log(req.body.cid +" : "+camp[0].password)
+				if(camp[0].password==hash(req.body.password)){
+					res.redirect("/camp/"+req.body.cid)
+				}else{
+					console.log("Wrong password");
+					//req.flash('error',"Wrong Password or Camp ID")
+					msg = "Wrong Password or Camp ID"
+					res.render("campAdminLogin.ejs",{er:msg})
+					msg = ""
+				}
 			}
+			
 		}
 	})
 });
@@ -430,13 +465,14 @@ app.post("/camp/:id/request",function(req,res){
 					}
 					console.log(obj)
 					obj.save()
-					res.redirect("/camp/"+req.params.id+"/request")
+					res.redirect("/camp/"+req.params.id)
 				}
 			})
 
 		}
 
 	})
+
 });
 
 
@@ -566,38 +602,50 @@ app.post("/camp/:id/new",function(req,res){
 				}else{
 					console.log("adding new survivor...")
 					console.log(query)
-					var missingquery = "SELECT * FROM missing_list WHERE fname = \""+req.body.fname +"\""+" AND sname=\""+req.body.sname +"\""+" AND age="+req.body.age+";"
-					console.log(missingquery)
-					connection.query(missingquery,function(error,report,fields){
-						console.log(report)
-						if(report.length>0){
-							var htmlMessage = '<h3>update on '+ report[0].fname+ "\'s Missing report,</h3> <p>A similar survivor data has been recorded in our database, please check survivor query page to confirm identity of survivor <a href=\"/query\">here</a>.</p>"
-				             reciever = report[0].email_id
-				             console.log(reciever)
-				             var mailOptions = {
-				            
-				              from: '"DRMS INDIA" newgenrick@gmail.com', // sender address
-				              to: reciever , // list of receivers
-				              subject: 'Missing report update : '+report[0].rep_id, // Subject line
-				              html: htmlMessage// plain text body
-				            };
-				            transporter.sendMail(mailOptions, function (err, info) {
-				               if(err){
-				                 console.log(err)
-				                 res.redirect("/camp/"+req.params.id)
-				               }
-				               else{
-				                 console.log(info);
-				                 res.redirect("/camp/"+req.params.id)
-				               }
-				            }); 
-				            res.redirect("/camp/"+req.params.id)
-						}else{
+					surcount = 0
+					for (var i = 0; i < survivors.length; i++) {
+						if(survivors[i].camp_id==req.params.id)
+							surcount=surcount+1
+					}
+					countquery = "update camp set survivor_count = "+String(surcount+1)+" where camp_id=\""+req.params.id+"\";"
+					console.log(countquery)
+					connection.query(countquery,function(error,result){
+						if(error){
+							console.log(error)
 							res.redirect("/camp/"+req.params.id)
+						}else{
+							var missingquery = "SELECT * FROM missing_list WHERE fname = \""+req.body.fname +"\""+" AND sname=\""+req.body.sname +"\""+" AND age="+req.body.age+";"
+							console.log(missingquery)
+							connection.query(missingquery,function(error,report,fields){
+								console.log(report)
+								if(report.length>0){
+									var htmlMessage = '<h3>update on '+ report[0].fname+ "\'s Missing report,</h3> <p>A similar survivor data has been recorded in our database, please check survivor query page to confirm identity of survivor <a href=\"/query\">here</a>.</p>"
+						             reciever = report[0].email_id
+						             console.log(reciever)
+						             var mailOptions = {
+						            
+						              from: '"DRMS INDIA" newgenrick@gmail.com', // sender address
+						              to: reciever , // list of receivers
+						              subject: 'Missing report update : '+report[0].rep_id, // Subject line
+						              html: htmlMessage// plain text body
+						            };
+						            transporter.sendMail(mailOptions, function (err, info) {
+						               if(err){
+						                 console.log(err)
+						                 res.redirect("/camp/"+req.params.id)
+						               }
+						               else{
+						                 console.log(info);
+						                 res.redirect("/camp/"+req.params.id)
+						               }
+						            }); 
+						            res.redirect("/camp/"+req.params.id)
+								}else{
+									res.redirect("/camp/"+req.params.id)
+								}
+							})
 						}
 					})
-					
-					
 				}
 			})
 		}
@@ -623,9 +671,44 @@ app.get("/virtualcr",function(req,res){
 						if(error){
 							res.redirect("/")
 						}else{
+							var piedata = []
+
+							for (var i = 0; i < camps.length; i++) {
+								piedata.push([camps[i].location,camps[i].survivor_count])
+							}
+							console.log(piedata)
+
+							var donutdata = [0,0,0,0]
+							for (var i = 0; i < survivors.length; i++) {
+								if(survivors[i].age<=20)
+									donutdata[0]+=1
+								else if(survivors[i].age<=40)
+									donutdata[1]+=1
+								else if(survivors[i].age<=60)
+									donutdata[2]+=1
+								else if(survivors[i].age<=80)
+									donutdata[3]+=1
+							}
+							bardata = [0,0,0,0,0]
+							for (var i = 0; i < camps.length; i++) {
+							 	if(camps[i].threat_level<=2)
+									bardata[0]+=1
+								else if(camps[i].threat_level<=4)
+									bardata[1]+=1
+								else if(camps[i].threat_level<=6)
+									bardata[2]+=1
+								else if(camps[i].threat_level<=8)
+									bardata[3]+=1
+								else bardata[4]+=1
+							}
+
 							res.render("virtualCR.ejs",{camp:camps,
 												survivors:survivors,
-												missing:missing})
+												missing:missing,
+												piedata:piedata,
+												donutdata:donutdata,
+												bardata:bardata
+											})
 						}
 					})
 				}
@@ -667,9 +750,28 @@ app.post("/virtualcr/sort",function(req,res){
 						if(error){
 							res.redirect("/")
 						}else{
+							var piedata = []
+							
+							for (var i = 0; i < camps.length; i++) {
+								piedata.push([camps[i].location,camps[i].survivor_count])
+							}
+							var donutdata = [0,0,0,0]
+							for (var i = 0; i < survivors.length; i++) {
+								if(survivors[i].age<=20)
+									donutdata[0]+=1
+								else if(survivors[i].age<=40)
+									donutdata[1]+=1
+								else if(survivors[i].age<=60)
+									donutdata[2]+=1
+								else if(survivors[i].age<=80)
+									donutdata[3]+=1
+							}
 							res.render("virtualCR.ejs",{camp:camps,
 												survivors:survivors,
-												missing:missing})
+												missing:missing,
+												piedata:piedata,
+												donutdata:donutdata
+											})
 						}
 					})
 					
@@ -735,9 +837,40 @@ app.post("/virtualcr/filter",function(req,res){
 						if(error){
 							res.redirect("/")
 						}else{
+							var piedata = []
+							
+							for (var i = 0; i < camps.length; i++) {
+								piedata.push([camps[i].location,camps[i].survivor_count])
+							}
+							var donutdata = [0,0,0,0]
+							for (var i = 0; i < survivors.length; i++) {
+								if(survivors[i].age<=20)
+									donutdata[0]+=1
+								else if(survivors[i].age<=40)
+									donutdata[1]+=1
+								else if(survivors[i].age<=60)
+									donutdata[2]+=1
+								else if(survivors[i].age<=80)
+									donutdata[3]+=1
+							}
+							threat = [0,0,0,0,0]
+							for (var i = 0; i < camps.length; i++) {
+							 	if(camps[i].threat_level<=2)
+									bardata[0]+=1
+								else if(camps[i].threat_level<=4)
+									bardata[1]+=1
+								else if(camps[i].threat_level<=6)
+									bardata[2]+=1
+								else if(camps[i].threat_level<=8)
+									bardata[3]+=1
+								else bardata[4]+=1
+							}
 							res.render("virtualCR.ejs",{camp:camps,
 												survivors:survivors,
-												missing:missing})
+												missing:missing,
+												piedata: piedata,
+												donutdata:donutdata
+											})
 						}
 					})
 				}
@@ -782,7 +915,11 @@ app.get("/virtualcr/allocate/:id",function(req,res){
 		if(err){
 			console.log("Cannot find camp resources")
 			console.log(err)
+			res.redirect("/virtualcr")
 		}else{
+			if(!obj){
+				res.redirect("/virtualcr")
+			}
 			res.render("allocation.ejs",{
 				requested : obj.requested,
 				allocated : obj.allocated,

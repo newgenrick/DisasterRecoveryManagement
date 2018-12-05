@@ -22,23 +22,7 @@
       <li class="nav-item active">
         <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Link</a>
-      </li>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Dropdown
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="#">Action</a>
-          <a class="dropdown-item" href="#">Another action</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">Something else here</a>
-        </div>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link disabled" href="#">Disabled</a>
-      </li>
+      
     </ul>
     <form class="form-inline my-2 my-lg-0">
       <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
@@ -97,7 +81,9 @@
 				</table>
 			</div>
 			<div class="col-sm-6">
-				<div class="mapouter"><div class="gmap_canvas"><iframe width="420" height="310" id="gmap_canvas" src="https://maps.google.com/maps?q=bangalore&t=&z=13&ie=UTF8&iwloc=&output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe><a href="https://www.crocothemes.net"></a></div><style>.mapouter{text-align:right;height:310px;width:420px;}.gmap_canvas {overflow:hidden;background:none!important;height:310px;width:420px;}</style></div>
+				<div class="mapouter"><div class="gmap_canvas"><iframe width="420" height="310" id="gmap_canvas" src=
+					<%="https://maps.google.com/maps?q="+camp.location+"&t=&z=13&ie=UTF8&iwloc=&output=embed"%>
+					 frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe><a href="https://www.crocothemes.net"></a></div><style>.mapouter{text-align:right;height:310px;width:420px;}.gmap_canvas {overflow:hidden;background:none!important;height:310px;width:420px;}</style></div>
 			</div>
 		</div>
 		<h6>**To request new resources click <a href=<%="/camp/"+camp.camp_id+"/request"%>>here.</a></h6>
@@ -205,11 +191,11 @@
 		  <div class="form-row">
 		    <div class="form-group col-md-6">
 		      <label for="inputEmail4">first Name</label>
-		      <input type="text" class="form-control" id="inputEmail4" name = "fname" placeholder="First Name" required>
+		      <input type="text" class="form-control" id="inputEmail4" name = "fname" placeholder="First Name" pattern="[A-Za-z].{3,}" title="Must not contain any number or special characters" required>
 		    </div>
 		    <div class="form-group col-md-6">
 		      <label for="inputPassword4">Second Name</label>
-		      <input type="text" class="form-control" id="inputPassword4" placeholder="Second Name" name = "sname" required>
+		      <input type="text" class="form-control" id="inputPassword4" placeholder="Second Name" name = "sname" pattern="[A-Za-z]+" title="Must not contain any number or special characters" required>
 		    </div>
 		    <div class="form-group col-md-6">
 		      <label for="inputEmail4">Sex</label>
@@ -223,23 +209,23 @@
 		    </div>
 		    <div class="form-group col-md-6">
 		      <label for="inputPassword4">Age</label>
-		      <input type="number" class="form-control" id="inputPassword4" name = "age" placeholder="Age" required>
+		      <input type="number" class="form-control" id="inputPassword4" name = "age" placeholder="Age"min="0" required>
 		    </div>
 		  </div>
 		 
 		  <div class="form-row">
 		    <div class="form-group col-md-6">
 		      <label for="inputCity">City</label>
-		      <input type="text" class="form-control" id="inputCity" name = "city" required>
+		      <input type="text" class="form-control" id="inputCity" name = "city" pattern="[A-Za-z].{3,}" required>
 		    </div>
 		    <div class="form-group col-md-4">
 		      <label for="inputState">State</label>
-		      <input type="text" class="form-control" id="inputCity" name = "state" required>
+		      <input type="text" class="form-control" id="inputCity" name = "state" pattern="[A-Za-z].{3,}" required>
 
 		    </div>
 		    <div class="form-group col-md-2">
 		      <label for="inputZip">Zip</label>
-		      <input type="text" class="form-control" id="inputZip" name="zip" required>
+		      <input type="text" class="form-control" id="inputZip" name="zip" pattern=".{6,}" title="Must contain 6 digits" required>
 		    </div>
 		  </div>
 

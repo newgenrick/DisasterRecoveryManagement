@@ -76,8 +76,8 @@
 									      <td><%=resource[i].r_id%></td>
 									      <td><%=resource[i].r_name%></td>
 									      <td><%=resource[i].category%></td>
-									      <td><input type="number" name=<%= resource[i].r_id+"i"%> placeholder="Importance" ></td>
-									      <td><input type="number" name=<%= resource[i].r_id+"q"%> placeholder="Quantity" value=0></td>
+									      <td><input type="number" name=<%= resource[i].r_id+"i"%> placeholder="Importance" min="1" max="10" ></td>
+									      <td><input type="number" name=<%= resource[i].r_id+"q"%> placeholder="Quantity" min="0"  value=0></td>
 									    </tr>
 								  
 				  					<% } %>
